@@ -1,58 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Comic book inspired design system for Chair vs Divya game */
 
 @layer base {
   :root {
+    /* Comic book colors */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --foreground: 240 10% 3.9%;
+    
+    /* Primary - Electric blue for action */
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 217 100% 70%;
+    
+    /* Secondary - Comic yellow */
+    --secondary: 45 100% 51%;
+    --secondary-foreground: 240 10% 3.9%;
+    
+    /* Accent - Impact red */
+    --accent: 0 84% 60%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Comic effects colors */
+    --impact: 346 84% 56%;
+    --warning: 38 92% 50%;
+    --success: 142 71% 45%;
+    
+    /* Neutral colors */
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 240 10% 3.9%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
+    --popover-foreground: 240 10% 3.9%;
+    
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 217 91% 60%;
+    
+    /* Gradients for comic effects */
+    --gradient-action: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-impact: radial-gradient(circle, hsl(var(--impact)), hsl(var(--accent)));
+    --gradient-comic: linear-gradient(45deg, hsl(var(--secondary)), hsl(var(--warning)));
+    
+    /* Shadows for comic depth */
+    --shadow-comic: 4px 4px 0px hsl(0 0% 0% / 0.2);
+    --shadow-impact: 0 0 30px hsl(var(--impact) / 0.6);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.5);
+    
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -101,5 +106,72 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Comic Neue', cursive;
+  }
+}
+
+@layer utilities {
+  /* Comic book text styles */
+  .font-comic {
+    font-family: 'Bangers', cursive;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Comic impact effect */
+  .impact-text {
+    @apply font-comic text-6xl;
+    text-shadow: 3px 3px 0 hsl(var(--foreground) / 0.2),
+                 6px 6px 0 hsl(var(--foreground) / 0.1);
+  }
+  
+  /* Shake animation */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+  }
+  
+  /* Spin animation */
+  @keyframes spinFall {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(360deg) scale(0.8); }
+    100% { transform: rotate(720deg) scale(1); }
+  }
+  
+  /* Chair fly animation */
+  @keyframes chairFly {
+    0% { 
+      transform: translateX(-200%) translateY(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    100% { 
+      transform: translateX(0) translateY(0) rotate(360deg);
+      opacity: 1;
+    }
+  }
+  
+  /* Bounce animation */
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  .animate-spin-fall {
+    animation: spinFall 1s ease-in-out;
+  }
+  
+  .animate-chair-fly {
+    animation: chairFly 0.8s ease-out;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce 2s ease-in-out infinite;
   }
 }
