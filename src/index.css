@@ -8,56 +8,53 @@
 
 @layer base {
   :root {
-    /* Comic book colors */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* Soft pastel colors */
+    --background: 300 100% 98%;
+    --foreground: 300 10% 20%;
     
-    /* Primary - Electric blue for action */
-    --primary: 217 91% 60%;
+    /* Primary - Soft purple */
+    --primary: 280 60% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 217 100% 70%;
+    --primary-glow: 280 70% 75%;
     
-    /* Secondary - Comic yellow */
-    --secondary: 45 100% 51%;
-    --secondary-foreground: 240 10% 3.9%;
+    /* Secondary - Pink */
+    --secondary: 330 60% 85%;
+    --secondary-foreground: 300 10% 20%;
     
-    /* Accent - Impact red */
-    --accent: 0 84% 60%;
+    /* Accent - Lavender */
+    --accent: 270 50% 80%;
     --accent-foreground: 0 0% 100%;
     
-    /* Comic effects colors */
-    --impact: 346 84% 56%;
-    --warning: 38 92% 50%;
-    --success: 142 71% 45%;
+    /* Avatar colors */
+    --avatar-bg: 330 50% 85%;
+    --avatar-hair: 280 40% 60%;
     
     /* Neutral colors */
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 300 20% 96%;
+    --muted-foreground: 300 10% 45%;
     
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 300 10% 20%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover-foreground: 300 10% 20%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 217 91% 60%;
+    --border: 300 20% 90%;
+    --input: 300 20% 90%;
+    --ring: 280 60% 65%;
     
-    /* Gradients for comic effects */
-    --gradient-action: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-impact: radial-gradient(circle, hsl(var(--impact)), hsl(var(--accent)));
-    --gradient-comic: linear-gradient(45deg, hsl(var(--secondary)), hsl(var(--warning)));
+    /* Gradients */
+    --gradient-bg: linear-gradient(135deg, #e8d5f2 0%, #f4d0e1 50%, #e8d5f2 100%);
+    --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
     
-    /* Shadows for comic depth */
-    --shadow-comic: 4px 4px 0px hsl(0 0% 0% / 0.2);
-    --shadow-impact: 0 0 30px hsl(var(--impact) / 0.6);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.5);
+    /* Shadows */
+    --shadow-soft: 0 10px 40px rgba(200, 180, 220, 0.15);
+    --shadow-card: 0 4px 20px rgba(200, 180, 220, 0.2);
     
-    --radius: 0.5rem;
+    --radius: 1rem;
   }
 
   .dark {
@@ -105,8 +102,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'Comic Neue', cursive;
+    @apply text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
 }
 

@@ -40,9 +40,8 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        impact: "hsl(var(--impact))",
-        warning: "hsl(var(--warning))",
-        success: "hsl(var(--success))",
+        impact: "hsl(var(--avatar-bg))",
+        avatarHair: "hsl(var(--avatar-hair))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

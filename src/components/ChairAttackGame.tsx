@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import divyaAvatar from "@/assets/divya-avatar.png";
-import chairImage from "@/assets/chair.png";
+import { useState } from "react";
 
 const funnyMessages = [
   "Ouch, poor Divya 😵",
@@ -16,135 +14,142 @@ const funnyMessages = [
 ];
 
 export default function ChairAttackGame() {
-  const [isAttacking, setIsAttacking] = useState(false);
+  const [chairs, setChairs] = useState<Array<{ id: number; x: number; y: number }>>([]);
+  const [divyaState, setDivyaState] = useState<"normal" | "hit">("normal");
+  const [showMessage, setShowMessage] = useState(false);
   const [currentMessage, setCurrentMessage] = useState("");
-  const [divyaState, setDivyaState] = useState<"normal" | "hit" | "spinning">("normal");
-  const [showImpact, setShowImpact] = useState(false);
+  const [chairIdCounter, setChairIdCounter] = useState(0);
 
-  const launchAttack = () => {
-    if (isAttacking) return;
+  const throwChair = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Get click position
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     
-    setIsAttacking(true);
-    setDivyaState("normal");
-    setCurrentMessage("");
-    setShowImpact(false);
+    // Add new chair at click position
+    const newChairId = chairIdCounter + 1;
+    setChairIdCounter(newChairId);
+    setChairs(prev => [...prev, { id: newChairId, x, y }]);
     
-    // Chair hits after animation completes
+    // Trigger impact after animation
     setTimeout(() => {
-      // Impact moment
-      setShowImpact(true);
       setDivyaState("hit");
       const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
       setCurrentMessage(randomMessage);
+      setShowMessage(true);
       
-      // Shake effect
+      // Reset Divya after shake
       setTimeout(() => {
-        setDivyaState("spinning");
+        setDivyaState("normal");
       }, 500);
       
-      // Reset everything
+      // Hide message after a bit
       setTimeout(() => {
-        setIsAttacking(false);
-        setDivyaState("normal");
-        setShowImpact(false);
+        setShowMessage(false);
       }, 2000);
-    }, 800);
+    }, 600);
+    
+    // Remove chair after animation completes
+    setTimeout(() => {
+      setChairs(prev => prev.filter(chair => chair.id !== newChairId));
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 overflow-hidden relative">
-      {/* Title */}
-      <h1 className="font-comic text-6xl md:text-8xl mb-8 text-foreground animate-bounce-slow">
-        <span className="text-primary">Chair</span>
-        <span className="text-foreground mx-3">vs</span>
-        <span className="text-accent">Divya</span>
-      </h1>
+    <div 
+      className="min-h-screen relative overflow-hidden cursor-crosshair"
+      style={{ background: 'var(--gradient-bg)' }}
+      onClick={throwChair}
+    >
+      {/* Flying Chairs */}
+      {chairs.map(chair => (
+        <div
+          key={chair.id}
+          className="absolute pointer-events-none"
+          style={{
+            left: `${chair.x}px`,
+            top: `${chair.y}px`,
+            animation: 'chairFlyToCenter 0.8s ease-out forwards'
+          }}
+        >
+          <span className="text-4xl">🪑</span>
+        </div>
+      ))}
       
-      {/* Game Arena */}
-      <div className="relative w-full max-w-md h-96 flex items-center justify-center">
-        
-        {/* Flying Chair */}
-        {isAttacking && (
-          <div className={`absolute left-0 z-20 ${isAttacking ? 'animate-chair-fly' : ''}`}>
-            <img 
-              src={chairImage} 
-              alt="Flying chair" 
-              className="w-24 h-24 md:w-32 md:h-32"
+      {/* Main Content */}
+      <div className="min-h-screen flex flex-col items-center justify-center pointer-events-none">
+        {/* Divya Avatar - Simple Circle */}
+        <div className={`relative ${divyaState === "hit" ? "animate-shake" : ""}`}>
+          <div 
+            className="w-32 h-32 rounded-full flex items-center justify-center relative"
+            style={{ backgroundColor: 'hsl(var(--avatar-bg))' }}
+          >
+            {/* Hair */}
+            <div 
+              className="absolute top-0 w-full h-8 rounded-t-full"
+              style={{ backgroundColor: 'hsl(var(--avatar-hair))' }}
             />
-          </div>
-        )}
-        
-        {/* Impact Effect */}
-        {showImpact && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
-            <div className="impact-text text-impact animate-pulse">
-              POW!
+            {/* Face */}
+            <div className="relative z-10">
+              {/* Eyes */}
+              <div className="flex gap-3 mb-2">
+                <div className="w-2 h-2 bg-black rounded-full" />
+                <div className="w-2 h-2 bg-black rounded-full" />
+              </div>
+              {/* Smile */}
+              <svg width="30" height="15" className="mx-auto">
+                <path
+                  d="M 5 5 Q 15 12 25 5"
+                  stroke="black"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
           </div>
-        )}
-        
-        {/* Divya Avatar */}
-        <div className="flex flex-col items-center">
-          <div 
-            className={`
-              transition-all duration-300 
-              ${divyaState === "hit" ? "animate-shake" : ""}
-              ${divyaState === "spinning" ? "animate-spin-fall" : ""}
-            `}
-          >
-            <img 
-              src={divyaAvatar} 
-              alt="Divya avatar" 
-              className="w-48 h-48 md:w-64 md:h-64 object-contain"
-              style={{
-                filter: divyaState !== "normal" ? "hue-rotate(30deg)" : "none",
-              }}
-            />
-          </div>
-          <h2 className="font-comic text-3xl md:text-4xl mt-4 text-foreground">
-            Divya
-          </h2>
         </div>
-      </div>
-      
-      {/* Funny Message */}
-      {currentMessage && (
-        <div className="mt-8 p-4 bg-secondary rounded-lg shadow-[var(--shadow-comic)] animate-bounce">
-          <p className="font-comic text-xl md:text-2xl text-secondary-foreground">
-            {currentMessage}
+        
+        {/* Name Badge */}
+        <div className="mt-4 px-6 py-2 bg-white rounded-full shadow-md">
+          <span className="text-primary font-medium">divya</span>
+        </div>
+        
+        {/* Instruction Card */}
+        <div className="mt-8 px-8 py-6 bg-white/90 backdrop-blur rounded-2xl shadow-[var(--shadow-card)] text-center">
+          <h2 className="text-2xl font-medium text-primary mb-2">
+            Click anywhere to throw a chair!
+          </h2>
+          <p className="text-muted-foreground">
+            Playful stress relief ✨
           </p>
         </div>
-      )}
-      
-      {/* Attack Button */}
-      <button
-        onClick={launchAttack}
-        disabled={isAttacking}
-        className={`
-          mt-8 px-8 py-4 
-          font-comic text-xl md:text-2xl
-          bg-gradient-to-r from-primary to-primary-glow
-          text-primary-foreground
-          rounded-lg
-          shadow-[var(--shadow-comic)]
-          transition-all duration-200
-          hover:scale-105 hover:shadow-[var(--shadow-glow)]
-          active:scale-95
-          disabled:opacity-50 disabled:cursor-not-allowed
-          ${!isAttacking ? "hover:animate-pulse" : ""}
-        `}
-      >
-        Attack Divya with a Chair 💺⚡
-      </button>
-      
-      {/* Sound effect indicator */}
-      {showImpact && (
-        <div className="fixed top-10 right-10 animate-bounce">
-          <div className="bg-impact text-white px-4 py-2 rounded-full font-comic text-lg">
-            🔊 BONK!
+        
+        {/* Funny Message Popup */}
+        {showMessage && (
+          <div className="absolute top-1/4 px-6 py-3 bg-white rounded-full shadow-lg animate-bounce pointer-events-none">
+            <span className="text-lg font-medium text-foreground">{currentMessage}</span>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+      
+      <style>{`
+        @keyframes chairFlyToCenter {
+          0% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+          }
+          100% {
+            transform: translate(calc(50vw - var(--click-x, 0) * 1px - 20px), calc(50vh - var(--click-y, 0) * 1px - 200px)) rotate(720deg) scale(1.5);
+          }
+        }
+        
+        ${chairs.map(chair => `
+          [style*="left: ${chair.x}px"] {
+            --click-x: ${chair.x};
+            --click-y: ${chair.y};
+          }
+        `).join('')}
+      `}</style>
     </div>
   );
 }
