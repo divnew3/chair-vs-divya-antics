@@ -58,7 +58,7 @@ export default function ChairAttackGame() {
   return (
     <div 
       className="min-h-screen relative overflow-hidden cursor-crosshair"
-      style={{ background: 'var(--gradient-bg)' }}
+      style={{ background: 'linear-gradient(135deg, #e8d5f2 0%, #f4d0e1 50%, #e8d5f2 100%)' }}
       onClick={throwChair}
     >
       {/* Flying Chairs */}
